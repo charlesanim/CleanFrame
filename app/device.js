@@ -9,10 +9,21 @@
     applemusic: 'org.tizen.apple.apple-music'
   };
   var STREAMING = ['as6cYRgkPy.Binge', '73iTZRTc34.Stan', '5b8c3eb16b.BeamCTVDev',
+    'cj37Ni3qXM.HBONow', 'LBUAQX1exg.Hulu', 'gzcc4LRFBF.Peacock', 'rJyOSqC6Up.CBSAllAccess',
+    'Rk72oKFsRS.OtterKidsProd', '70fRFUwYlD.OtterGAProd', 'PvWgqxV3Xa.YouTubeTV',
+    'XtU8fQk2gN.ESPN', 'ZmmGjO6VKO.slingtv', 'VtuWAiZdHN.STARZPlay', 'ckfgqqzvt0.dplus',
+    'kk8MbItQ0H.VUDU', 'Jz7aUrV2Q4.Twitch', 'OK2Rdkjmsi.IMDbTV', 'Ob3XhAVMu6.amcplus',
     'KaLitts8bq.tenplaySamsungTizen', 'eYuOiOLYQX.KayoSports', 'Ne2ZsPWdKl.9NOW',
     '3KA0pm7a7V.TubiTV', 'rJeHak5zRg.Spotify', 'icp4AvUPiA.7plus'];
   var CONSUMER_SYSTEM = ['org.tizen.browser', 'com.microsoft.copilot'];
-  var EXTRA_BRANDS = {'rJeHak5zRg.Spotify': 'spotify', '5b8c3eb16b.BeamCTVDev': 'hbomax', '3KA0pm7a7V.TubiTV': 'tubi'};
+  var EXTRA_BRANDS = {
+    'rJeHak5zRg.Spotify': 'spotify', '5b8c3eb16b.BeamCTVDev': 'hbomax',
+    'cj37Ni3qXM.HBONow': 'hbomax', '3KA0pm7a7V.TubiTV': 'tubi',
+    'Rk72oKFsRS.OtterKidsProd': 'pbskids', '70fRFUwYlD.OtterGAProd': 'pbskids',
+    'LBUAQX1exg.Hulu': 'hulu', 'gzcc4LRFBF.Peacock': 'peacock',
+    'rJyOSqC6Up.CBSAllAccess': 'paramountplus', 'XtU8fQk2gN.ESPN': 'espn',
+    'Jz7aUrV2Q4.Twitch': 'twitch', 'PvWgqxV3Xa.YouTubeTV': 'youtube'
+  };
   var INTERNAL = ['adplatform.ADPlayer', 'WykOS4t4F0.cmsWebApp', '25emanual3.emanual',
     'ZODRT12q2l.WebAccountExtension', 'ByJlgt0XeD.CastSettingsApp', 'tv6pbVMQFF.PrivacyChoices'];
   var SELF = 'nClrkHome1.FrameHome';
@@ -49,6 +60,20 @@
   }
   function home(done) { launchApp('com.samsung.tv.csfs', done); }
   function settings(done) { launchApp('com.samsung.tv.coba.setting', done); }
+  function sources(done) {
+    if (!api()) { unavailable(done); return; }
+    launchApp('com.samsung.tv.coba.source', function (err) {
+      if (!err) { done(null); return; }
+      launchApp('org.tizen.SMSourceAPP', done);
+    });
+  }
+  function livetv(done) {
+    if (!api()) { unavailable(done); return; }
+    launchApp('com.samsung.tv.coba.livetv', function (err) {
+      if (!err) { done(null); return; }
+      launchApp('org.tizen.tv-viewer', done);
+    });
+  }
   function apps(done) {
     if (!api()) { unavailable(done); return; }
     var finish = bounded(done);
@@ -70,5 +95,5 @@
       }, function (err) { finish(failure(err)); });
     } catch (err) { finish(failure(err)); }
   }
-  window.FrameDevice = { launch: launch, launchApp: launchApp, art: art, home: home, settings: settings, apps: apps };
+  window.FrameDevice = { launch: launch, launchApp: launchApp, art: art, home: home, settings: settings, sources: sources, livetv: livetv, apps: apps };
 }());
