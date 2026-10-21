@@ -868,6 +868,7 @@
     if (t.group === 'rotation') return [{ id: 'mode', title: '', items: options('mode', MODES.map(function (m) { return m.id; }), flat),
       reason: flat ? 'Choose Photo in Background to use rotation.' : 'Timed changes pause while Settings or another panel is open.' }];
     return [{ id: 'samsung', title: '', items: [
+      { action: 'samsung.sources', label: 'Inputs & sources', description: 'Switch to HDMI, game consoles or Live TV' },
       { action: 'samsung.home', label: 'Samsung Home', description: 'Open Samsung’s Home screen' },
       { action: 'samsung.settings', label: 'TV settings', description: 'Picture, sound and network settings' }
     ] }];
@@ -914,6 +915,7 @@
     else if (item.axis) { patch[item.axis] = item.value; setLook(patch, { row: item.axis }); }
     else if (item.action === 'background.wallpaper') openWallpaper();
     else if (item.action === 'background.rotation') openAppearance('rotation');
+    else if (item.action === 'samsung.sources') perform('Inputs & sources', FrameDevice.sources);
     else if (item.action === 'samsung.home') perform('Samsung Home', FrameDevice.home);
     else if (item.action === 'samsung.settings') perform('TV settings', FrameDevice.settings);
   }
@@ -1126,7 +1128,7 @@
       utPlates[utPlateIndex].className = 'ph-plate ut-lens is-outgoing';
       utPlateIndex = 1 - utPlateIndex; el = utPlates[utPlateIndex];
       el.className = 'ph-plate ut-lens is-preparing';
-      el.style.width = width + 'px'; el.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+      el.style.width = width + 'px'; el.style.left = x + 'px'; el.style.top = y + 'px';
       fieldTransform(utFields[utPlateIndex], x, y, width, 60);
       el.offsetWidth;
       utPlateKey = key;
@@ -1291,7 +1293,7 @@
       plateEl = phPlates[photoPlateIndex]; fieldEl = phFields[photoPlateIndex];
       plateEl.className = 'ph-plate is-preparing';
       plateEl.style.width = width + 'px'; plateEl.style.height = height + 'px';
-      plateEl.style.transform = 'translate3d(0,' + y + 'px,0)';
+      plateEl.style.left = '112px'; plateEl.style.top = y + 'px';
       fieldTransform(fieldEl, 112, y, width, height);
       plateEl.offsetWidth; // Establish zero opacity before the incoming crossfade.
       photoPlateKey = key;
@@ -1301,8 +1303,9 @@
   }
   function fieldTransform(el, x, y, width, height) {
     el._placement = { x: x, y: y, width: width, height: height };
+    el.style.left = (-x) + 'px'; el.style.top = (-y) + 'px';
     el.style.transformOrigin = (x + width / 2) + 'px ' + (y + height / 2) + 'px';
-    el.style.transform = 'translate3d(' + (-x) + 'px,' + (-y) + 'px,0)' + (S.c.bg === 'photo' && S.c.material === 'tint' && !REDUCED_MOTION ? ' scale(1.04)' : '');
+    el.style.transform = S.c.bg === 'photo' && S.c.material === 'tint' && !REDUCED_MOTION ? 'scale(1.04)' : 'none';
   }
   function renderList(hs) {
     var items = hs.items, n = items.length, compact = hs.mode === 'arrange', pitch = compact ? PH_COMPACT_PITCH : PH_PITCH;
