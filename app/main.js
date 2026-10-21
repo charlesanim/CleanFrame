@@ -1155,7 +1155,7 @@
       utPlates[utPlateIndex].className = 'ph-plate ut-lens is-outgoing';
       utPlateIndex = 1 - utPlateIndex; el = utPlates[utPlateIndex];
       el.className = 'ph-plate ut-lens is-preparing';
-      el.style.width = width + 'px'; el.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+      el.style.width = width + 'px'; el.style.left = x + 'px'; el.style.top = y + 'px';
       fieldTransform(utFields[utPlateIndex], x, y, width, 60);
       el.offsetWidth;
       utPlateKey = key;
@@ -1331,7 +1331,7 @@
       plateEl = phPlates[photoPlateIndex]; fieldEl = phFields[photoPlateIndex];
       plateEl.className = 'ph-plate is-preparing';
       plateEl.style.width = width + 'px'; plateEl.style.height = height + 'px';
-      plateEl.style.transform = 'translate3d(0,' + y + 'px,0)';
+      plateEl.style.left = '112px'; plateEl.style.top = y + 'px';
       fieldTransform(fieldEl, 112, y, width, height);
       plateEl.offsetWidth; // Establish zero opacity before the incoming crossfade.
       photoPlateKey = key;
@@ -1341,8 +1341,9 @@
   }
   function fieldTransform(el, x, y, width, height) {
     el._placement = { x: x, y: y, width: width, height: height };
+    el.style.left = (-x) + 'px'; el.style.top = (-y) + 'px';
     el.style.transformOrigin = (x + width / 2) + 'px ' + (y + height / 2) + 'px';
-    el.style.transform = 'translate3d(' + (-x) + 'px,' + (-y) + 'px,0)' + (S.c.bg === 'photo' && S.c.material === 'tint' && !REDUCED_MOTION ? ' scale(1.04)' : '');
+    el.style.transform = S.c.bg === 'photo' && S.c.material === 'tint' && !REDUCED_MOTION ? 'scale(1.04)' : 'none';
   }
   function renderList(hs) {
     var items = hs.items, n = items.length, compact = hs.mode === 'arrange', pitch = compact ? PH_COMPACT_PITCH : PH_PITCH;
