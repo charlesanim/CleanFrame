@@ -50,29 +50,42 @@
     if (!IDS[brand]) { done({message: 'This app has no launch target.'}); return; }
     launchApp(IDS[brand], done);
   }
-  function art(done) {
+  function launchControl(id, pairs, done) {
     if (!api()) { unavailable(done); return; }
     var finish = bounded(done);
     try {
-      var data = [new tizen.ApplicationControlData('mode', ['fullscreen']), new tizen.ApplicationControlData('requester', ['mobile'])];
+      var data = pairs.map(function (p) { return new tizen.ApplicationControlData(p[0], [p[1]]); });
       var control = new tizen.ApplicationControl('http://tizen.org/appcontrol/operation/default', null, null, null, data);
-      api().launchAppControl(control, 'org.tizen.art-app', function () { finish(null); }, function (err) { finish(failure(err)); });
+      api().launchAppControl(control, id, function () { finish(null); }, function (err) { finish(failure(err)); });
     } catch (err) { finish(failure(err)); }
   }
-  function home(done) { launchApp('com.samsung.tv.csfs', done); }
-  function settings(done) { launchApp('com.samsung.tv.coba.setting', done); }
-  function sources(done) {
-    if (!api()) { unavailable(done); return; }
-    launchApp('com.samsung.tv.coba.source', function (err) {
+  function art(done) {
+    launchControl('org.tizen.art-app', [['mode', 'fullscreen'], ['requester', 'mobile']], done);
+  }
+  function home(done) {
+    if (window.__tv) { launchApp('com.samsung.tv.csfs', done); return; }
+    launchControl('com.samsung.tv.csfs', [['entry_point', 'smarthub_key'], ['switch_page', 'd/media.category']], function (err) {
       if (!err) { done(null); return; }
-      launchApp('org.tizen.SMSourceAPP', done);
+      launchApp('com.samsung.tv.csfs', done);
+    });
+  }
+  function settings(done) {
+    if (window.__tv) { launchApp('com.samsung.tv.coba.setting', done); return; }
+    launchControl('org.tizen.menu', [['uri', '/opt/apps/org.tizen.menu/res/json/ATSC/menu.json'], ['__K_EX_FORCE_BOOST', 'enable']], function (err) {
+      if (!err) { done(null); return; }
+      launchControl('com.samsung.tv.csfs', [['entry_point', 'smarthub_key'], ['switch_page', 'd/menu.category'], ['__COBA_REQUEST_FOCUS_ON__', 's/setting']], done);
+    });
+  }
+  function sources(done) {
+    launchControl('com.samsung.tv.csfs', [['entry_point', 'smarthub_key'], ['switch_page', 'd/menu.category'], ['__COBA_REQUEST_FOCUS_ON__', 's/source']], function (err) {
+      if (!err) { done(null); return; }
+      launchApp('org.tizen.connection-guide-app', done);
     });
   }
   function livetv(done) {
-    if (!api()) { unavailable(done); return; }
-    launchApp('com.samsung.tv.coba.livetv', function (err) {
+    launchApp('org.tizen.tv-viewer', function (err) {
       if (!err) { done(null); return; }
-      launchApp('org.tizen.tv-viewer', done);
+      launchControl('com.samsung.tv.csfs', [['entry_point', 'smarthub_key'], ['switch_page', 'd/media.category'], ['__COBA_REQUEST_FOCUS_ON__', 's/livetv']], done);
     });
   }
   var cachedApps = null, warmingApps = null;
