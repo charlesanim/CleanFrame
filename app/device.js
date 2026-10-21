@@ -22,9 +22,10 @@
     'Rk72oKFsRS.OtterKidsProd': 'pbskids', '70fRFUwYlD.OtterGAProd': 'pbskids',
     'LBUAQX1exg.Hulu': 'hulu', 'gzcc4LRFBF.Peacock': 'peacock',
     'rJyOSqC6Up.CBSAllAccess': 'paramountplus', 'XtU8fQk2gN.ESPN': 'espn',
-    'Jz7aUrV2Q4.Twitch': 'twitch', 'PvWgqxV3Xa.YouTubeTV': 'youtube'
+    'Jz7aUrV2Q4.Twitch': 'twitch'
   };
   var INTERNAL = ['adplatform.ADPlayer', 'WykOS4t4F0.cmsWebApp', '25emanual3.emanual',
+    'd0m1lV1nt2.emanual', '2022ePop01.SmartTV',
     'ZODRT12q2l.WebAccountExtension', 'ByJlgt0XeD.CastSettingsApp', 'tv6pbVMQFF.PrivacyChoices'];
   var SELF = 'nClrkHome1.FrameHome';
   function api() { return window.tizen && window.tizen.application; }
@@ -34,8 +35,8 @@
   function failure(err) {
     return { message: 'The TV could not open this screen.', detail: err && (err.message || err.name) || 'Try again, or press the remote’s Home button to return to CleanFrame.' };
   }
-  function bounded(done) {
-    var finished = false, timer = setTimeout(function () { finish({ message: 'The TV did not respond. Please try again.' }); }, 8000);
+  function bounded(done, ms) {
+    var finished = false, timer = setTimeout(function () { finish({ message: 'The TV did not respond. Please try again.' }); }, ms || 8000);
     function finish(err, value) { if (finished) return; finished = true; clearTimeout(timer); done(err, value); }
     return finish;
   }
@@ -74,9 +75,9 @@
       launchApp('org.tizen.tv-viewer', done);
     });
   }
-  function apps(done) {
-    if (!api()) { unavailable(done); return; }
-    var finish = bounded(done);
+  var cachedApps = null, warmingApps = null;
+  function queryApps(done) {
+    var finish = bounded(done, 20000);
     try {
       api().getAppsInfo(function (list) {
         var known = {}, seen = {}, result = [];
@@ -91,9 +92,31 @@
           result.push({ appId: a.id, name: a.name, brand: known[a.id] || EXTRA_BRANDS[a.id] || '', icon: a.iconPath || '', rank: primary ? Object.keys(IDS).indexOf(known[a.id]) : (stream ? 20 : 30) });
         });
         result.sort(function (a, b) { return a.rank - b.rank || a.name.toLowerCase().localeCompare(b.name.toLowerCase()); });
+        if (!window.__tv) cachedApps = result;
         finish(null, result);
       }, function (err) { finish(failure(err)); });
     } catch (err) { finish(failure(err)); }
   }
+  function apps(done) {
+    if (!api()) { unavailable(done); return; }
+    if (window.__tv) { queryApps(done); return; }
+    if (cachedApps) {
+      var snapshot = cachedApps.slice();
+      setTimeout(function () { done(null, snapshot); }, 0);
+      if (!warmingApps) {
+        warmingApps = [];
+        queryApps(function () { warmingApps = null; });
+      }
+      return;
+    }
+    if (warmingApps) { warmingApps.push(done); return; }
+    warmingApps = [done];
+    queryApps(function (err, result) {
+      var queue = warmingApps ? warmingApps.slice() : [];
+      warmingApps = null;
+      queue.forEach(function (fn) { fn(err, result ? result.slice() : undefined); });
+    });
+  }
+  if (api() && !window.__tv) setTimeout(function () { apps(function () {}); }, 100);
   window.FrameDevice = { launch: launch, launchApp: launchApp, art: art, home: home, settings: settings, sources: sources, livetv: livetv, apps: apps };
 }());
