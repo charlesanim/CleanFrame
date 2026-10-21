@@ -384,6 +384,12 @@
     if (saved && initial.mode === 'open') initial.wall = WALLS[(wallIndex(initial.wall) + 1) % WALLS.length].id;
     // Keep the old schema keys alongside the builder values for in-place updates.
     try { localStorage.setItem(KEY, JSON.stringify(serialise(initial))); S.c = initial; storageOk = true; } catch (e) { storageOk = false; }
+    if (S.c.bg === 'photo' && wall(S.c.wall)) {
+      IMG.photo.src = WP + S.c.wall + '.jpg';
+      IMG.bg.src = WP + S.c.wall + '-panel.jpg';
+      IMG.mat.src = matSrc(S.c.wall, S.c.material);
+      IMG.field.src = IMG.fieldAlt.src = IMG.utility.src = IMG.utilityAlt.src = fieldSrc(S.c.wall, S.c.material);
+    }
   }
   function clearSession() { S.undo = []; S.removedAt = {}; S.note = null; S.err = null; }
   function begin() { S.note = null; }
@@ -1667,9 +1673,13 @@
   function fieldSrc(id, material) { return 'assets/materials/' + id + (material === 'soft' ? '-field-blur.jpg' : material === 'tint' ? '-field-clear.jpg' : '-field-frost.jpg'); }
   function makeImg(cls, src) { var im = document.createElement('img'); im.className = cls; im.alt = ''; im._src = src; im.src = src; return im; }
   function whenReady(im, done) {
-    var fin = false, timer = setTimeout(function () { finish(false); }, 8000);
+    var fin = false, timer = setTimeout(function () { finish(!!(im.complete && im.naturalWidth)); }, 20000);
     function finish(ok) { if (fin) return; fin = true; clearTimeout(timer); done(ok); }
-    function ready() { if (im.decode) im.decode().then(function () { finish(true); }, function () { finish(false); }); else finish(true); }
+    function ready() {
+      if (document.hidden || !im.decode) { finish(true); return; }
+      var decTimer = setTimeout(function () { finish(true); }, 1500);
+      im.decode().then(function () { clearTimeout(decTimer); finish(true); }, function () { clearTimeout(decTimer); finish(!!(im.complete && im.naturalWidth)); });
+    }
     if (im.complete) { if (im.naturalWidth) ready(); else finish(false); }
     else { im.onload = ready; im.onerror = function () { finish(false); }; }
   }
@@ -1747,7 +1757,11 @@
     }
     function complete() {
       if (!imageDone || !fontDone || failed || token !== wallToken) return;
-      window.requestAnimationFrame(function () { if (!failed && token === wallToken) finish(loadedBundle); });
+      var done = false;
+      function runFinish() { if (done || failed || token !== wallToken) return; done = true; finish(loadedBundle); }
+      if (document.hidden) { runFinish(); return; }
+      setTimeout(runFinish, 50);
+      window.requestAnimationFrame(runFinish);
     }
     needs = target.bg === 'photo' && S.bundleKey !== bundleKey(target) && (!S.shown || S.shown.bg !== 'photo' || target.wall !== S.c.wall || materialApplies(target));
     needsFont = !fontMetrics[target.font]; imageDone = !needs; fontDone = !needsFont;
@@ -1885,7 +1899,11 @@
   document.addEventListener('visibilitychange', function () {
     heldKeys = {};
     if (document.hidden) { pauseRotation(); clearTimeout(clockTimer); }
-    else { release(); after(); updateClock(); focusStage(); }
+    else {
+      release();
+      if (S.c.bg === 'photo' && (!committedBundle || S.bundleKey !== bundleKey(S.c)) && !S.pending) setLook({}, { transient: true, startup: true });
+      after(); updateClock(); focusStage();
+    }
   });
   window.addEventListener('resize', fit);
 
