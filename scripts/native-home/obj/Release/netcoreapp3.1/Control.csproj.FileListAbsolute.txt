@@ -1,0 +1,13 @@
+/tmp/nhbuild/CleanFrameHomeControl.deps.json
+/tmp/nhbuild/CleanFrameHomeControl.runtimeconfig.json
+/tmp/nhbuild/CleanFrameHomeControl.runtimeconfig.dev.json
+/tmp/nhbuild/CleanFrameHomeControl.dll
+/tmp/nhbuild/CleanFrameHomeControl.pdb
+/Users/charlesanim/.copilot/session-state/0a4b2b72-7f38-4a68-b76e-8d65beb8f26e/files/CleanFrame-native-home-q60b/scripts/native-home/obj/Release/netcoreapp3.1/Control.csproj.AssemblyReference.cache
+/Users/charlesanim/.copilot/session-state/0a4b2b72-7f38-4a68-b76e-8d65beb8f26e/files/CleanFrame-native-home-q60b/scripts/native-home/obj/Release/netcoreapp3.1/Control.GeneratedMSBuildEditorConfig.editorconfig
+/Users/charlesanim/.copilot/session-state/0a4b2b72-7f38-4a68-b76e-8d65beb8f26e/files/CleanFrame-native-home-q60b/scripts/native-home/obj/Release/netcoreapp3.1/Control.AssemblyInfoInputs.cache
+/Users/charlesanim/.copilot/session-state/0a4b2b72-7f38-4a68-b76e-8d65beb8f26e/files/CleanFrame-native-home-q60b/scripts/native-home/obj/Release/netcoreapp3.1/Control.AssemblyInfo.cs
+/Users/charlesanim/.copilot/session-state/0a4b2b72-7f38-4a68-b76e-8d65beb8f26e/files/CleanFrame-native-home-q60b/scripts/native-home/obj/Release/netcoreapp3.1/Control.csproj.CoreCompileInputs.cache
+/Users/charlesanim/.copilot/session-state/0a4b2b72-7f38-4a68-b76e-8d65beb8f26e/files/CleanFrame-native-home-q60b/scripts/native-home/obj/Release/netcoreapp3.1/CleanFrameHomeControl.dll
+/Users/charlesanim/.copilot/session-state/0a4b2b72-7f38-4a68-b76e-8d65beb8f26e/files/CleanFrame-native-home-q60b/scripts/native-home/obj/Release/netcoreapp3.1/CleanFrameHomeControl.pdb
+/Users/charlesanim/.copilot/session-state/0a4b2b72-7f38-4a68-b76e-8d65beb8f26e/files/CleanFrame-native-home-q60b/scripts/native-home/obj/Release/netcoreapp3.1/Control.genruntimeconfig.cache

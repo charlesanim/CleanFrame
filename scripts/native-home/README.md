@@ -1,6 +1,6 @@
 # Native Home control
 
-This one-shot development helper is scoped to Nathan's Frame and firmware 2130.0. It does not run inside CleanFrame or remain active on the TV. It uses the existing SDB developer connection and the published package-name command workaround to execute as SDK UID 901. It does not request root or change security policy.
+This one-shot development helper is scoped to two tested TVs: Nathan's Frame (QA55LS03DAWXXY, firmware 2130.0, Tizen 9.0) and a Q60B (QN43Q60BAFXZA, firmware T-NKLBAKUC, Tizen 6.5). It does not run inside CleanFrame or remain active on the TV. It uses the existing SDB developer connection and the published package-name command workaround to execute as SDK UID 901. It does not request root or change security policy.
 
 `Control.cs` exposes read-only query, guarded apply, and exact-value restore through native Home and vconf APIs. It refuses other firmware, root, changed original values, or an ineligible/missing app. Apply failures attempt immediate restore. The baseline and compiled tools remain in ignored `.local/native-home/`.
 
@@ -16,3 +16,5 @@ The existing private `original.json` is the tested rollback baseline. Do not ove
 Even query/inspect stages temporary helper files on the device. These are device operations, not offline repository checks. A clone without the private baseline, SDK and compiled output cannot perform the tested rollback. Preserve the local recovery folder separately; GitHub is a source backup only.
 
 The implementation was reviewed against the [published S90D native Home work](https://github.com/splitcipher/couchroot/blob/83906b468836869933012da03a4018fb339462b3/docs/devices/s90d/README.md). This Frame's native query, apply/restore/reapply and physical Home-from-Netflix test were checked independently. Source review does not replace device testing after future firmware changes.
+
+The helper targets `netcoreapp3.1` with `RollForward=Major`, because the Q60B ships only .NET Core 3.1.3 while the Frame has .NET 6; one build runs on both. On the Q60B, the baseline Home was `com.samsung.tv.csfs` for the Home operation and all four vconf keys, with `auto_start` 1. Query, apply/restore/reapply, a hidden cold-boot start and the physical Home button from Netflix were all checked on that TV.
