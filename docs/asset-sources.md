@@ -22,6 +22,25 @@ Reviewed on 20 October 2026. Each of the fifteen linked Unsplash photo pages dis
 
 The background preparation and material rendering steps are described in [asset generation](assets.md). Full-size original photos and research studies are outside the public source.
 
+## CleanYourTV themes
+
+The Themes group ports the themes from [CleanYourTV](https://github.com/Gathin23/cleanyourtv/tree/main/themes) (MIT, copyright 2026 Gathin). Their wallpapers are bundled unchanged at 1920 x 1080; thumbnails, panels and material fields are derived here.
+
+| Wallpapers | Author | Licence | Source |
+| --- | --- | --- | --- |
+| Aurora night | Gathin23 | MIT | [aurora](https://github.com/Gathin23/cleanyourtv/tree/main/themes/aurora) |
+| Glass | matheus-caldeira | MIT | [glass](https://github.com/Gathin23/cleanyourtv/tree/main/themes/glass) |
+| Ruska | priku | MIT | [ruska](https://github.com/Gathin23/cleanyourtv/tree/main/themes/ruska) |
+| The fourteen Scenes landscapes | manas-04 | MIT | [scenes](https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes) |
+
+The three Sweden photos come from Wikimedia Commons through CleanYourTV's [sweden](https://github.com/Gathin23/cleanyourtv/tree/main/themes/sweden) theme and keep their own licences, not MIT. Their derived thumbnails, panels and material fields are adaptations under the same licences.
+
+| Wallpaper | Photographer | Licence | Source |
+| --- | --- | --- | --- |
+| Abisko aurora | Pavel Shyshkouski | CC BY-SA 4.0 | [File page](https://commons.wikimedia.org/wiki/File:Aurora_in_Abisko_near_Tornetr%C3%A4sk.jpg) |
+| Vasabron, Stockholm | Julian Herzog | CC BY 4.0 | [File page](https://commons.wikimedia.org/wiki/File:Vasabron_Vasa_bridge_Stockholm_2016_01.jpg) |
+| Skeppsbron, Stockholm | Arild Vågen | CC BY-SA 2.0 | [File page](https://commons.wikimedia.org/wiki/File:Skeppsbron_june_2013.jpg) |
+
 ## Fonts and icons
 
 Public fonts are Manrope, Geist and Newsreader under SIL OFL 1.1. Their licence texts are beside the assets; Geist and Newsreader source URLs and hashes are in `app/assets/fonts/SOURCES.json`.

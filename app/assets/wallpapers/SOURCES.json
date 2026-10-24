@@ -148,5 +148,205 @@
     "tone": "light",
     "credit": "Cristina Gottardi",
     "source": "https://unsplash.com/photos/CSpjU6hYo_0"
+  },
+  {
+    "id": "aurora",
+    "name": "Aurora night",
+    "src": "assets/wallpapers/aurora.jpg",
+    "thumb": "assets/wallpapers/aurora-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "dark",
+    "credit": "Gathin23, CleanYourTV (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/aurora"
+  },
+  {
+    "id": "glass",
+    "name": "Glass",
+    "src": "assets/wallpapers/glass.jpg",
+    "thumb": "assets/wallpapers/glass-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "dark",
+    "credit": "matheus-caldeira, CleanYourTV (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/glass"
+  },
+  {
+    "id": "ruska",
+    "name": "Ruska",
+    "src": "assets/wallpapers/ruska.jpg",
+    "thumb": "assets/wallpapers/ruska-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "dark",
+    "credit": "priku, CleanYourTV (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/ruska"
+  },
+  {
+    "id": "sc-dusk-peaks",
+    "name": "Dusk peaks",
+    "src": "assets/wallpapers/sc-dusk-peaks.jpg",
+    "thumb": "assets/wallpapers/sc-dusk-peaks-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "dark",
+    "credit": "manas-04, CleanYourTV scenes (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes"
+  },
+  {
+    "id": "sc-golden-coast",
+    "name": "Golden coast",
+    "src": "assets/wallpapers/sc-golden-coast.jpg",
+    "thumb": "assets/wallpapers/sc-golden-coast-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "light",
+    "credit": "manas-04, CleanYourTV scenes (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes"
+  },
+  {
+    "id": "sc-moon-lake",
+    "name": "Moon lake",
+    "src": "assets/wallpapers/sc-moon-lake.jpg",
+    "thumb": "assets/wallpapers/sc-moon-lake-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "dark",
+    "credit": "manas-04, CleanYourTV scenes (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes"
+  },
+  {
+    "id": "sc-aurora",
+    "name": "Aurora",
+    "src": "assets/wallpapers/sc-aurora.jpg",
+    "thumb": "assets/wallpapers/sc-aurora-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "dark",
+    "credit": "manas-04, CleanYourTV scenes (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes"
+  },
+  {
+    "id": "sc-dunes",
+    "name": "Dunes",
+    "src": "assets/wallpapers/sc-dunes.jpg",
+    "thumb": "assets/wallpapers/sc-dunes-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "dark",
+    "credit": "manas-04, CleanYourTV scenes (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes"
+  },
+  {
+    "id": "sc-above-the-clouds",
+    "name": "Above the clouds",
+    "src": "assets/wallpapers/sc-above-the-clouds.jpg",
+    "thumb": "assets/wallpapers/sc-above-the-clouds-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "light",
+    "credit": "manas-04, CleanYourTV scenes (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes"
+  },
+  {
+    "id": "sc-mirror-lake",
+    "name": "Mirror lake",
+    "src": "assets/wallpapers/sc-mirror-lake.jpg",
+    "thumb": "assets/wallpapers/sc-mirror-lake-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "light",
+    "credit": "manas-04, CleanYourTV scenes (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes"
+  },
+  {
+    "id": "sc-tea-hills",
+    "name": "Tea hills",
+    "src": "assets/wallpapers/sc-tea-hills.jpg",
+    "thumb": "assets/wallpapers/sc-tea-hills-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "light",
+    "credit": "manas-04, CleanYourTV scenes (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes"
+  },
+  {
+    "id": "sc-alpenglow",
+    "name": "Alpenglow",
+    "src": "assets/wallpapers/sc-alpenglow.jpg",
+    "thumb": "assets/wallpapers/sc-alpenglow-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "dark",
+    "credit": "manas-04, CleanYourTV scenes (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes"
+  },
+  {
+    "id": "sc-city-lights",
+    "name": "City lights",
+    "src": "assets/wallpapers/sc-city-lights.jpg",
+    "thumb": "assets/wallpapers/sc-city-lights-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "dark",
+    "credit": "manas-04, CleanYourTV scenes (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes"
+  },
+  {
+    "id": "sc-balloon-sunrise",
+    "name": "Balloon sunrise",
+    "src": "assets/wallpapers/sc-balloon-sunrise.jpg",
+    "thumb": "assets/wallpapers/sc-balloon-sunrise-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "light",
+    "credit": "manas-04, CleanYourTV scenes (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes"
+  },
+  {
+    "id": "sc-monsoon",
+    "name": "Monsoon",
+    "src": "assets/wallpapers/sc-monsoon.jpg",
+    "thumb": "assets/wallpapers/sc-monsoon-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "dark",
+    "credit": "manas-04, CleanYourTV scenes (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes"
+  },
+  {
+    "id": "sc-lighthouse-coast",
+    "name": "Lighthouse coast",
+    "src": "assets/wallpapers/sc-lighthouse-coast.jpg",
+    "thumb": "assets/wallpapers/sc-lighthouse-coast-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "dark",
+    "credit": "manas-04, CleanYourTV scenes (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes"
+  },
+  {
+    "id": "sc-autumn-valley",
+    "name": "Autumn valley",
+    "src": "assets/wallpapers/sc-autumn-valley.jpg",
+    "thumb": "assets/wallpapers/sc-autumn-valley-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "dark",
+    "credit": "manas-04, CleanYourTV scenes (MIT)",
+    "source": "https://github.com/Gathin23/cleanyourtv/tree/main/themes/scenes"
+  },
+  {
+    "id": "sweden-abisko",
+    "name": "Abisko aurora",
+    "src": "assets/wallpapers/sweden-abisko.jpg",
+    "thumb": "assets/wallpapers/sweden-abisko-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "dark",
+    "credit": "Pavel Shyshkouski, CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Aurora_in_Abisko_near_Tornetr%C3%A4sk.jpg"
+  },
+  {
+    "id": "sweden-vasabron",
+    "name": "Vasabron, Stockholm",
+    "src": "assets/wallpapers/sweden-vasabron.jpg",
+    "thumb": "assets/wallpapers/sweden-vasabron-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "light",
+    "credit": "Julian Herzog, CC BY 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Vasabron_Vasa_bridge_Stockholm_2016_01.jpg"
+  },
+  {
+    "id": "sweden-skeppsbron",
+    "name": "Skeppsbron, Stockholm",
+    "src": "assets/wallpapers/sweden-skeppsbron.jpg",
+    "thumb": "assets/wallpapers/sweden-skeppsbron-thumb.jpg",
+    "pos": "50% 50%",
+    "tone": "light",
+    "credit": "Arild Vågen, CC BY-SA 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Skeppsbron_june_2013.jpg"
   }
 ]

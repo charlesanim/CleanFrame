@@ -62,6 +62,17 @@
   var LOOK_VALUES = { bg: ['dark', 'light', 'photo'], layout: ['list', 'dock'], apps: ['icons', 'both', 'text'], font: Object.keys(FONTS).filter(function (id) { return id === 'manrope' || PRIVATE_FONTS.indexOf(id) >= 0; }), controls: ['icons', 'both', 'text'], focus: ['type', 'glass'], material: ['soft', 'frost', 'tint'] };
   var LOOK_NAMES = { bg: 'Background', layout: 'Layout', apps: 'Apps', font: 'Font', controls: 'Home controls', focus: 'Focus', material: 'Material' };
   var VALUE_NAMES = { dark: 'Dark', light: 'Light', photo: 'Photo', list: 'List', dock: 'Dock', type: 'Type', glass: 'Glass', soft: 'Soft', frost: 'Frost', tint: 'Clear tint', icons: 'Icons', both: 'Icons and text', text: 'Text' };
+  /* CleanYourTV's themes (github.com/Gathin23/cleanyourtv/tree/main/themes) mapped onto CleanFrame's look axes.
+     A theme with a collection rotates through that set only. */
+  var THEMES = [
+    { id: 'default', name: 'Default', note: 'Black background with the glass dock', look: { bg: 'dark', layout: 'dock', focus: 'glass', apps: 'both', controls: 'both' } },
+    { id: 'aurora', name: 'Aurora', note: 'Teal and violet aurora on navy', look: { bg: 'photo', wall: 'aurora', layout: 'dock', focus: 'glass', material: 'soft', apps: 'both', controls: 'both' } },
+    { id: 'glass', name: 'Glass', note: 'Frosted-glass dock and icon-only buttons', look: { bg: 'photo', wall: 'glass', layout: 'dock', focus: 'glass', material: 'frost', apps: 'both', controls: 'icons' } },
+    { id: 'ruska', name: 'Ruska', note: 'Finnish autumn dusk; the clear dock lets the lake show through', look: { bg: 'photo', wall: 'ruska', layout: 'dock', focus: 'glass', material: 'tint', apps: 'both', controls: 'both' } },
+    { id: 'scenes', name: 'Scenes', note: '14 illustrated landscapes, a new one every hour', look: { bg: 'photo', wall: 'sc-dusk-peaks', layout: 'dock', focus: 'glass', material: 'soft', apps: 'both', controls: 'both' }, mode: '60', collection: 'scenes' },
+    { id: 'sweden', name: 'Sweden', note: 'Three photos of Sweden hourly, frosted dock, icon-only buttons', look: { bg: 'photo', wall: 'sweden-abisko', layout: 'dock', focus: 'glass', material: 'frost', apps: 'both', controls: 'icons' }, mode: '60', collection: 'sweden' },
+    { id: 'compact', name: 'Compact', note: 'Smaller icon-only tiles and buttons on black', look: { bg: 'dark', layout: 'dock', focus: 'glass', apps: 'icons', controls: 'icons' } }
+  ];
   var UTIL = { art: ['Art Mode', 'art'], sources: ['Inputs', 'sources'], apps: ['All apps', 'apps'], arrange: ['Arrange', 'arrange'], settings: ['Settings', 'settings'] };
   var MSG = {
     leave: { title: 'Leave Home?', line: 'Switch inputs or open Samsung Home?', note: '', actions: [['stay', 'Stay'], ['sources', 'Inputs'], ['samsung', 'Samsung Home']] }
@@ -109,6 +120,8 @@
   function app(id) { for (var i = 0; i < APPS.length; i++) if (APPS[i].id === id) return APPS[i]; return null; }
   function wall(id) { for (var i = 0; i < WALLS.length; i++) if (WALLS[i].id === id) return WALLS[i]; return null; }
   function wallIndex(id) { for (var i = 0; i < WALLS.length; i++) if (WALLS[i].id === id) return i; return 0; }
+  // Timed and open-mode rotation stay inside the current wallpaper's collection (a theme's set).
+  function nextWall(id) { var i = wallIndex(id), set = WALLS[i].collection, k, w; for (k = 1; k <= WALLS.length; k++) { w = WALLS[(i + k) % WALLS.length]; if (w.collection === set) return w.id; } return id; }
   function frostClass(w) { var i = [.12, .20, .30, .36, .44].indexOf(w.frostVeil); return i > 0 ? ' fv-' + (i + 1) : ''; }
   function wallClasses(w) { return frostClass(w) + (w.listColumn ? ' lc-' + w.listColumn : '') + (w.dockQuiet ? ' db-quiet' : '') + (w.clockMist ? ' tl-mist' : ''); }
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -381,7 +394,7 @@
     var saved = load(), initial; S.c = clean(saved); initial = next(S.c.home.slice(), S.c.recent.slice());
     S.stack = [{ id: 'home', f: { zone: 'apps', u: 0 } }];
     S.sel = S.c.lastApp; S.selIdx = S.c.home.indexOf(S.sel);
-    if (saved && initial.mode === 'open') initial.wall = WALLS[(wallIndex(initial.wall) + 1) % WALLS.length].id;
+    if (saved && initial.mode === 'open') initial.wall = nextWall(initial.wall);
     // Keep the old schema keys alongside the builder values for in-place updates.
     try { localStorage.setItem(KEY, JSON.stringify(serialise(initial))); S.c = initial; storageOk = true; } catch (e) { storageOk = false; }
     if (S.c.bg === 'photo' && wall(S.c.wall)) {
@@ -529,7 +542,7 @@
   function openSettings() { push({ id: 'settings', f: { id: S.settingsFocus } }); }
   function openAppearance(group) {
     var axis = { background: 'bg', layout: 'layout', typography: 'font', focus: 'focus' }[group];
-    var action = S.detailFocus[group] || (axis ? 'choice.' + axis + '.' + S.c[axis] : group === 'rotation' ? 'rotation.' + S.c.mode : 'samsung.home');
+    var action = S.detailFocus[group] || (axis ? 'choice.' + axis + '.' + S.c[axis] : group === 'rotation' ? 'rotation.' + S.c.mode : group === 'themes' ? 'theme.' + (currentTheme() || THEMES[0]).id : 'samsung.home');
     push({ id: 'appearance', group: group, f: { action: action } });
   }
   function openMessage(key) { push({ id: 'message', msg: key, f: { b: 0 } }); }
@@ -836,10 +849,30 @@
   function closeEditor() { clearSession(); pop(); }
 
   /* ---------- Settings, Layout and messages ---------- */
+  function themeApplied(t) {
+    if ((t.mode || 'fixed') !== S.c.mode) return false;
+    return Object.keys(t.look).every(function (k) {
+      if (k === 'wall' && t.collection) return wall(S.c.wall) && wall(S.c.wall).collection === t.collection;
+      if (k === 'material' && t.look.bg !== 'photo') return true;
+      return S.c[k] === t.look[k];
+    });
+  }
+  function currentTheme() { for (var i = 0; i < THEMES.length; i++) if (themeApplied(THEMES[i])) return THEMES[i]; return null; }
+  function applyTheme(t) {
+    var c, look = {};
+    S.err = null; S.lookError = null;
+    if ((t.mode || 'fixed') !== S.c.mode) {
+      c = next(S.c.home.slice(), S.c.recent.slice()); c.mode = t.mode || 'fixed';
+      if (!write(c, 'Theme ' + t.name)) { S.lookError = { type: 'save', patch: {}, row: 'theme', transient: false }; return; }
+    }
+    Object.keys(t.look).forEach(function (k) { if (!(k === 'wall' && t.collection && wall(S.c.wall).collection === t.collection)) look[k] = t.look[k]; });
+    setLook(look, { row: 'theme' });
+  }
   function mode() { for (var i = 0; i < MODES.length; i++) if (MODES[i].id === S.c.mode) return MODES[i]; return MODES[0]; }
   function settingsRows() {
     var n = S.c.home.length;
-    return [{ id: 'background', label: 'Background', value: S.c.bg === 'photo' ? wall(S.c.wall).name : VALUE_NAMES[S.c.bg] },
+    return [{ id: 'themes', label: 'Themes', value: currentTheme() ? currentTheme().name : 'Custom' },
+      { id: 'background', label: 'Background', value: S.c.bg === 'photo' ? wall(S.c.wall).name : VALUE_NAMES[S.c.bg] },
       { id: 'layout', label: 'Layout', value: VALUE_NAMES[S.c.layout] },
       { id: 'typography', label: 'Typography', value: FONTS[S.c.font].name },
       { id: 'focus', label: 'Focus', value: VALUE_NAMES[S.c.focus] + (materialApplies() ? ', ' + VALUE_NAMES[S.c.material] : '') },
@@ -864,7 +897,7 @@
     if (id === 'editor') openEditor('settings');
     else openAppearance(id);
   }
-  var DETAIL_NAMES = { background: 'Background', layout: 'Layout', typography: 'Typography', focus: 'Focus', rotation: 'Rotation', samsung: 'Samsung' };
+  var DETAIL_NAMES = { themes: 'Themes', background: 'Background', layout: 'Layout', typography: 'Typography', focus: 'Focus', rotation: 'Rotation', samsung: 'Samsung' };
   function choice(axis, value, disabled) {
     return { action: axis === 'mode' ? 'rotation.' + value : 'choice.' + axis + '.' + value, axis: axis, value: value, disabled: !!disabled,
       label: axis === 'font' ? FONTS[value].name : axis === 'mode' ? MODES.filter(function (m) { return m.id === value; })[0].name : value === 'both' ? 'Both' : VALUE_NAMES[value] };
@@ -888,6 +921,9 @@
       { id: 'material', title: 'Material', horizontal: true, items: options('material', ['soft', 'frost', 'tint'], inactive),
         reason: inactive ? flat ? 'Materials are available with a Photo background.' : 'Choose Glass focus or the Dock layout to use materials.' : '' }
     ];
+    if (t.group === 'themes') return [{ id: 'themes', title: '', items: THEMES.map(function (th) {
+      return { action: 'theme.' + th.id, label: th.name, note: th.note, theme: th, applied: themeApplied(th), thumbnail: th.look.bg === 'photo' ? th.look.wall : '', swatch: th.look.bg === 'photo' ? '' : th.look.bg };
+    }) }];
     if (t.group === 'rotation') return [{ id: 'mode', title: '', items: options('mode', MODES.map(function (m) { return m.id; }), flat),
       reason: flat ? 'Choose Photo in Background to use rotation.' : 'Timed changes pause while Settings or another panel is open.' }];
     return [{ id: 'samsung', title: '', items: [
@@ -938,6 +974,7 @@
     else if (item.axis) { patch[item.axis] = item.value; setLook(patch, { row: item.axis }); }
     else if (item.action === 'background.wallpaper') openWallpaper();
     else if (item.action === 'background.rotation') openAppearance('rotation');
+    else if (item.theme) applyTheme(item.theme);
     else if (item.action === 'samsung.sources') perform('Inputs & sources', FrameDevice.sources);
     else if (item.action === 'samsung.home') perform('Samsung Home', FrameDevice.home);
     else if (item.action === 'samsung.settings') perform('TV settings', FrameDevice.settings);
@@ -1433,12 +1470,12 @@
     appearanceTitle.textContent = DETAIL_NAMES[t.group];
     var at = detailLocation(t), selected = at.item, error = S.lookError, status = '', hint;
     function command(item, inner, cls) {
-      var applied = item.axis && S.c[item.axis] === item.value;
+      var applied = item.axis ? S.c[item.axis] === item.value : !!item.applied;
       var loading = !!(item.axis && S.pending && S.pending.target[item.axis] === item.value && S.pending.row === item.axis);
       return '<button type="button" tabindex="-1" class="setting-choice' + (cls ? ' ' + cls : '') + (t.f.action === item.action ? ' is-focus' : '') + (item.disabled ? ' is-disabled' : '') + (applied ? ' is-applied' : '') + (loading ? ' is-loading' : '') + '"'
-        + (item.axis ? ' role="radio" aria-checked="' + !!applied + '"' : '') + ' aria-label="' + esc(item.axis && item.value === 'both' ? 'Icons and text' : item.label) + '" aria-disabled="' + !!item.disabled + '" aria-busy="' + loading + '"'
+        + (item.axis || item.theme ? ' role="radio" aria-checked="' + !!applied + '"' : '') + ' aria-label="' + esc(item.axis && item.value === 'both' ? 'Icons and text' : item.label) + '" aria-disabled="' + !!item.disabled + '" aria-busy="' + loading + '"'
         + ' data-z="detail" data-i="0" data-id="' + item.action + '" data-action="' + item.action + '">' + inner
-        + (item.axis ? '<span class="setting-tick" aria-hidden="true">' + (applied ? icon('check') : '') + '</span>' : '') + '</button>';
+        + (item.axis || item.theme ? '<span class="setting-tick" aria-hidden="true">' + (applied ? icon('check') : '') + '</span>' : '') + '</button>';
     }
     setHTML(appearanceBack, command({ action: 'settings.back', label: t.group === 'rotation' ? 'Background' : 'Settings' }, icon('left') + '<span>' + (t.group === 'rotation' ? 'Background' : 'Settings') + '</span>', 'setting-back'));
     setHTML(appearanceRows, detailSections(t).map(function (section) {
@@ -1447,12 +1484,12 @@
         + '<div class="setting-options"' + (section.items[0].axis ? ' role="radiogroup" aria-label="' + esc(section.title || LOOK_NAMES[section.id] || DETAIL_NAMES[t.group]) + '"' : '') + '>'
         + section.items.map(function (item) {
           var swatch = item.axis === 'bg', body = '';
-          if (swatch || item.thumbnail) body += item.value === 'light' || item.value === 'dark'
-            ? '<span class="setting-swatch swatch-' + item.value + '" aria-hidden="true"></span>'
-            : '<img class="setting-swatch" src="' + WP + S.c.wall + '-thumb.jpg" alt="">';
+          if (swatch || item.thumbnail || item.swatch) body += item.value === 'light' || item.value === 'dark' || item.swatch
+            ? '<span class="setting-swatch swatch-' + (item.swatch || item.value) + '" aria-hidden="true"></span>'
+            : '<img class="setting-swatch" src="' + WP + (typeof item.thumbnail === 'string' && item.thumbnail ? item.thumbnail : S.c.wall) + '-thumb.jpg" alt="">';
           body += '<span class="setting-copy"><span class="setting-name">' + esc(item.label) + '</span>'
             + (item.description ? '<span class="setting-description">' + esc(item.description) + '</span>' : '') + '</span>';
-          if (!item.axis) body += icon('right', 'setting-forward');
+          if (!item.axis && !item.theme) body += icon('right', 'setting-forward');
           return command(item, body, item.description ? 'has-description' : '');
         }).join('') + '</div>'
         + (section.reason ? '<p class="setting-reason">' + esc(section.reason) + '</p>' : '') + '</section>';
@@ -1463,7 +1500,7 @@
         + command({ action: 'settings.retry', label: 'Try again' }, '<span>Try again</span>', 'setting-retry');
     }
     setHTML(appearanceStatus, status);
-    hint = selected.disabled ? '' : selected.action === 'settings.back' ? 'Return to ' + (t.group === 'rotation' ? 'Background' : 'Settings') : selected.action === 'settings.retry' ? 'Retry this change' : selected.axis ? 'Apply selected setting' : selected.action === 'background.wallpaper' ? 'Choose a wallpaper' : selected.action === 'background.rotation' ? 'Choose a rotation interval' : 'Open on the TV';
+    hint = selected.disabled ? '' : selected.action === 'settings.back' ? 'Return to ' + (t.group === 'rotation' ? 'Background' : 'Settings') : selected.action === 'settings.retry' ? 'Retry this change' : selected.theme ? selected.note : selected.axis ? 'Apply selected setting' : selected.action === 'background.wallpaper' ? 'Choose a wallpaper' : selected.action === 'background.rotation' ? 'Choose a rotation interval' : 'Open on the TV';
     setHTML(appearanceDesc, hint ? '<span class="remote-key">OK</span><span>' + esc(hint) + '</span>' : '');
   }
   function renderWallpaper(t) {
@@ -1815,7 +1852,7 @@
     activeSince = Date.now();
     rotationTimer = setTimeout(function () {
       pauseRotation(); activeMs = 0;
-      if (rotationActive()) setLook({ wall: WALLS[(wallIndex(S.c.wall) + 1) % WALLS.length].id }, { row: 'bg' });
+      if (rotationActive()) setLook({ wall: nextWall(S.c.wall) }, { row: 'bg' });
     }, Math.max(10, mode().min * QA.minuteMs - activeMs));
   }
   function updateClock() {

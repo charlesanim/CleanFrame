@@ -37,4 +37,8 @@ The retained generator covers all fifteen filenames and writes `.local/materials
 
 For another photo, add its source/credit to `SOURCES.json`, prepare its background and thumbnail, add the gallery entry in `catalog.js`, generate the four registered materials and panel backdrop, then measure and review its foreground metadata. Keep the crop identical across all assets. Run source and browser checks before packaging.
 
+## Themes
+
+`THEMES` in `main.js` maps each CleanYourTV theme onto the look axes (background, layout, apps, controls, focus, material) and a rotation mode. A wallpaper's optional `collection` in `catalog.js` (`cleanyourtv`, `scenes`, `sweden`) keeps timed and open-mode rotation inside that set; the original fifteen have none and rotate among themselves. Imported wallpapers keep their 1920 x 1080 JPEGs; thumbnails use `sips -Z 512` at quality 80, then `build-materials.mjs` makes the panel and four fields. Their `ut`, `clockMist` and `dockQuiet` values come from measured relative luminance behind the clock, top-right controls, lower-right controls and dock.
+
 Source pages and licence observations are recorded in [asset sources](asset-sources.md).
